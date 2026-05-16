@@ -1,0 +1,14 @@
+{
+  "name": "email-url-threat-analyzer",
+  "version": "1.0.0",
+  "description": "Local email and URL threat analyzer with optional VirusTotal URL reputation checks.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "start:web-vuln": "node web-vuln-scanner/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

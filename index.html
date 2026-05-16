@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cyber Threat Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Beginner cyber security project</p>
+          <h1 id="page-title">Cyber Threat Analyzer</h1>
+          <p class="intro">
+            Scan suspicious messages, links, and email headers for phishing signals,
+            authentication failures, sender mismatches, and risky URL patterns.
+          </p>
+        </div>
+        <div class="score-card" aria-live="polite">
+          <span class="score-label">Risk score</span>
+          <strong id="risk-score">0</strong>
+          <span id="risk-level" class="risk-level safe">No scan yet</span>
+        </div>
+      </section>
+
+      <nav class="mode-tabs" aria-label="Analyzer modes">
+        <button class="active" type="button" data-mode="message">URL & Message</button>
+        <button type="button" data-mode="headers">Email Headers</button>
+      </nav>
+
+      <section class="workspace mode-panel active" id="message-panel" aria-label="URL and message analyzer">
+        <form class="input-panel" id="scan-form">
+          <div class="panel-heading">
+            <div>
+              <h2>Scan input</h2>
+              <p>URLs, full emails, SMS messages, or copied alerts all work.</p>
+            </div>
+            <button class="icon-button" type="button" id="load-sample" aria-label="Load sample">
+              <span aria-hidden="true">+</span>
+            </button>
+          </div>
+
+          <label for="scan-input">Text to analyze</label>
+          <textarea
+            id="scan-input"
+            name="scan-input"
+            rows="12"
+            placeholder="Paste a suspicious email or URL here..."
+          ></textarea>
+
+          <div class="actions">
+            <button type="submit">Analyze threat</button>
+            <button class="secondary" type="button" id="check-virustotal">Check VirusTotal</button>
+            <button class="secondary" type="button" id="export-message-report">Export report</button>
+            <button class="secondary" type="button" id="clear-scan">Clear</button>
+          </div>
+          <p id="vt-status" class="status-line" role="status">VirusTotal checks require a local API key.</p>
+        </form>
+
+        <aside class="results-panel" aria-label="Analysis results">
+          <div class="panel-heading">
+            <div>
+              <h2>Findings</h2>
+              <p id="summary">Run a scan to see the result breakdown.</p>
+            </div>
+          </div>
+
+          <div class="meter" aria-hidden="true">
+            <span id="risk-meter"></span>
+          </div>
+
+          <div class="stats" aria-label="Scan statistics">
+            <div>
+              <span id="url-count">0</span>
+              <small>URLs</small>
+            </div>
+            <div>
+              <span id="signal-count">0</span>
+              <small>Signals</small>
+            </div>
+            <div>
+              <span id="domain-count">0</span>
+              <small>Domains</small>
+            </div>
+          </div>
+
+          <ol id="findings-list" class="findings-list">
+            <li class="empty-state">No suspicious signals detected yet.</li>
+          </ol>
+        </aside>
+      </section>
+
+      <section class="workspace mode-panel" id="headers-panel" aria-label="Phishing header analyzer">
+        <form class="input-panel" id="header-form">
+          <div class="panel-heading">
+            <div>
+              <h2>Header input</h2>
+              <p>Paste raw email headers copied from your mail client.</p>
+            </div>
+            <button class="icon-button" type="button" id="load-header-sample" aria-label="Load header sample">
+              <span aria-hidden="true">+</span>
+            </button>
+          </div>
+
+          <label for="header-input">Email headers to analyze</label>
+          <textarea
+            id="header-input"
+            name="header-input"
+            rows="12"
+            placeholder="Paste raw email headers here..."
+          ></textarea>
+
+          <div class="actions">
+            <button type="submit">Analyze headers</button>
+            <button class="secondary" type="button" id="export-header-report">Export report</button>
+            <button class="secondary" type="button" id="clear-headers">Clear</button>
+          </div>
+        </form>
+
+        <aside class="results-panel" aria-label="Header analysis results">
+          <div class="panel-heading">
+            <div>
+              <h2>Header findings</h2>
+              <p id="header-summary">Run a header scan to see authentication and sender checks.</p>
+            </div>
+          </div>
+
+          <div class="meter" aria-hidden="true">
+            <span id="header-risk-meter"></span>
+          </div>
+
+          <div class="stats" aria-label="Header scan statistics">
+            <div>
+              <span id="header-count">0</span>
+              <small>Headers</small>
+            </div>
+            <div>
+              <span id="header-signal-count">0</span>
+              <small>Signals</small>
+            </div>
+            <div>
+              <span id="hop-count">0</span>
+              <small>Hops</small>
+            </div>
+          </div>
+
+          <ol id="header-findings-list" class="findings-list">
+            <li class="empty-state">No header signals detected yet.</li>
+          </ol>
+        </aside>
+      </section>
+
+      <section class="details mode-detail active" data-detail="message" aria-label="Detected URLs">
+        <div class="section-title">
+          <h2>Detected URLs</h2>
+          <p>Each domain is inspected for deceptive patterns.</p>
+        </div>
+        <div id="url-list" class="url-list">
+          <p class="empty-state">No URLs found.</p>
+        </div>
+      </section>
+
+      <section class="details mode-detail active" data-detail="message" aria-label="VirusTotal results">
+        <div class="section-title">
+          <h2>VirusTotal</h2>
+          <p>Reputation results are fetched through the local server.</p>
+        </div>
+        <div id="vt-list" class="url-list">
+          <p class="empty-state">Run a VirusTotal check after adding at least one URL.</p>
+        </div>
+      </section>
+
+      <section class="details" aria-label="Extracted indicators">
+        <div class="section-title">
+          <h2>Indicators of Compromise</h2>
+          <p>URLs, domains, IPs, emails, and hashes found in the active scan.</p>
+        </div>
+        <div id="ioc-list" class="ioc-grid">
+          <p class="empty-state">Run a scan to extract indicators.</p>
+        </div>
+      </section>
+
+      <section class="details mode-detail" data-detail="headers" aria-label="Header details">
+        <div class="section-title">
+          <h2>Parsed Header Details</h2>
+          <p>Sender identity, authentication results, and delivery path.</p>
+        </div>
+        <div id="header-details-list" class="url-list">
+          <p class="empty-state">No header details parsed yet.</p>
+        </div>
+      </section>
+
+      <section class="details" aria-label="Scan history">
+        <div class="section-title">
+          <div>
+            <h2>Scan History</h2>
+            <p>Recent scans are saved locally in this browser.</p>
+          </div>
+          <button class="secondary compact" type="button" id="clear-history">Clear history</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <p class="empty-state">No saved scans yet.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
