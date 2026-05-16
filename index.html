@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Vulnerability Scanner</title>
+    <link rel="stylesheet" href="styles.css?v=critical-sqli-xss-2">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Authorized security testing • Build: critical-sqli-xss-2</p>
+          <h1 id="page-title">Web Vulnerability Scanner</h1>
+          <p class="intro">
+            Safe DAST-style scanning for critical and high-risk web issues:
+            exposed secrets, weak headers, unsafe forms, CORS problems, and sensitive paths.
+          </p>
+        </div>
+        <div class="score-card" aria-live="polite">
+          <span>Risk score</span>
+          <strong id="score">0</strong>
+          <small id="score-label">No scan yet</small>
+        </div>
+      </section>
+
+      <section class="scanner-grid">
+        <form class="panel" id="scan-form">
+          <div class="panel-heading">
+            <div>
+              <h2>New scan</h2>
+              <p>Only scan applications you own or have explicit permission to test.</p>
+            </div>
+          </div>
+
+          <label for="target">Target URL</label>
+          <input id="target" name="target" type="url" placeholder="https://example.com" required>
+
+          <div class="check-row">
+            <input id="authorized" type="checkbox">
+            <label for="authorized">I am authorized to scan this target.</label>
+          </div>
+
+          <div class="check-row">
+            <input id="light-active" type="checkbox" checked>
+            <label for="light-active">Include safe light active checks for sensitive exposure paths.</label>
+          </div>
+
+          <div class="actions">
+            <button type="submit" id="scan-button">Start scan</button>
+            <button class="secondary" type="button" id="load-demo">Load demo report</button>
+            <button class="secondary" type="button" id="export-report">Export report</button>
+          </div>
+          <p class="status-line" id="status">Ready.</p>
+        </form>
+
+        <aside class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Summary</h2>
+              <p id="recommendation">Run a scan to get an analyst recommendation.</p>
+            </div>
+          </div>
+          <div class="meter" aria-hidden="true"><span id="meter"></span></div>
+          <div class="stats">
+            <div><strong id="critical-count">0</strong><small>Critical</small></div>
+            <div><strong id="high-count">0</strong><small>High</small></div>
+            <div><strong id="medium-count">0</strong><small>Medium</small></div>
+            <div><strong id="low-count">0</strong><small>Low</small></div>
+            <div><strong id="info-count">0</strong><small>Info</small></div>
+          </div>
+          <div class="meta-list" id="scan-meta">
+            <p class="empty">No scan metadata yet.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Findings</h2>
+            <p>Severity, confidence, evidence, and remediation for each issue.</p>
+          </div>
+          <div class="filters">
+            <button class="filter active" type="button" data-filter="all">All</button>
+            <button class="filter" type="button" data-filter="critical">Critical</button>
+            <button class="filter" type="button" data-filter="high">High</button>
+            <button class="filter" type="button" data-filter="medium">Medium</button>
+            <button class="filter" type="button" data-filter="low">Low</button>
+            <button class="filter" type="button" data-filter="info">Info</button>
+          </div>
+        </div>
+        <div id="findings" class="findings">
+          <p class="empty">No findings yet.</p>
+        </div>
+      </section>
+
+      <section class="details-grid">
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Observed Headers</h2>
+              <p>Response headers captured from the target.</p>
+            </div>
+          </div>
+          <div id="headers" class="code-list">
+            <p class="empty">No headers captured yet.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Scan History</h2>
+              <p>Saved locally in this browser.</p>
+            </div>
+            <button class="secondary compact" type="button" id="clear-history">Clear</button>
+          </div>
+          <div id="history" class="history-list">
+            <p class="empty">No scan history yet.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js?v=critical-sqli-xss-2"></script>
+  </body>
+</html>
